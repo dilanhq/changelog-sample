@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <base href="/">
+    <title>YOUR_APPLICATION</title>
+    <!-- Include Auth0.js script -->
+    <script src="https://cdn.auth0.com/js/auth0/9.18/auth0.min.js"></script>
+    <script type="text/javascript">
+        const webAuth = new auth0.WebAuth({
+            domain: '<YOUR_DOMAIN>',
+            clientID: '<YOUR_CLIENT_ID>',
+            redirectUri: window.location.origin,
+            scope: 'openid profile email',
+            responseType: 'token id_token'
+        });
+        
+        function handleAuthentication() {
+            webAuth.parseHash((err, authResult) => {
+                if (authResult && authResult.accessToken && authResult.idToken) {
+                    setSession(authResult);
+                    const redirectTo = localStorage.getItem('redirect_to') || '/';
+                    // Clear the redirect path from localStorage
+                    localStorage.removeItem('redirect_to');
+                    window.location.replace(redirectTo);
+                } else if (err) {
+                    console.error(`Error parsing hash: ${err.error}. Description: ${err.errorDescription}`);
+                }
+            });
+        }
+        
+        function setSession(authResult) {
+            const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+            localStorage.setItem('access_token', authResult.accessToken);
+            localStorage.setItem('id_token', authResult.idToken);
+            localStorage.setItem('expires_at', expiresAt);
+        }
+        
+        function isAuthenticated() {
+            const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+            return new Date().getTime() < expiresAt;
+        }
+        
+        (function initializeAuth() {
+            if (!isAuthenticated() && window.location.hash) {
+                // If we have a hash but not authenticated, it means we're coming back from Auth0
+                handleAuthentication();
+            } else if (!isAuthenticated()) {
+                try {
+                    localStorage.setItem('redirect_to', window.location.pathname + window.location.search + window.location.hash);
+                } catch (error) {
+                    console.error('Failed to set redirect_to in localStorage', error);
+                }
+                webAuth.authorize();
+            }
+        })();
+    </script>
+</head>
+<body>
+    <style>
+        /* .video-container > *{ background-color: #000 !important; } .video-container video{ background-color: #000; } .video-container{ background-color: #000; } */
+        /* *:active { outline: none; } */
+        
+        /* Webkit (Chrome, Safari) */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background-color: #777;
+            border-radius: 2px;
+        }
+        
+        /* Firefox */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: transparent #777;
+        }
+    </style>
+    <div id="react-app" style="height: 100vh; max-height: -webkit-fill-available; display: flex;"></div>
+    <!-- Include bundled analytics script -->
+    <script src="dist/analytics.bundle.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
