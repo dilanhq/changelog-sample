@@ -1,8 +1,8 @@
 # Changelog Sample Repository
 
-[![DiLan's Edition](https://cdn.dilan.id/assets/logo/dilan-extras/svg/dilan-badge-github-dilansedition-sm.svg)](https://dilan.id)
+[![DiLan's Edition](https://static.dilan.id/logo/extra/dilan-badge-github-dilansedition-sm.svg)](https://dilan.id)
 
-![DiLan Banner](https://cdn.dilan.id/assets/logo/dilan-extras/dilan-banner-github-repo.png)
+![DiLan Banner](https://static.dilan.id/logo/extra/dilan-banner-github-repo.png)
 
 This repository contains example changelog files to show how we document and track changes in our projects. These examples serve as a guide to the format and structure we use to keep our changelogs clear and comprehensive.
 
