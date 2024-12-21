@@ -8,7 +8,7 @@
                 "s3:PutObject",
                 "s3:PutObjectAcl"
             ],
-            "Resource": "<YOUR_BUCKET_ARN>"
+            "Resource": "<YOUR_S3_ARN>"
         }
     ]
 }
